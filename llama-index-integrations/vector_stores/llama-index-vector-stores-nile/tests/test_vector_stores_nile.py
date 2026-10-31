@@ -49,9 +49,7 @@ class TestNileVectorStore(unittest.TestCase):
         # expected to fail if we don't have tenant_id in the node metadata
         with pytest.raises(Exception) as e_info:
             self.tenant_aware_vector_store.add([node])
-            assert "tenant_id cannot be None if tenant_aware is True" in str(
-                e_info.value
-            )
+        assert "tenant_id cannot be None if tenant_aware is True" in str(e_info.value)
 
         # one more insert for the new node
         node.metadata["tenant_id"] = "test_tenant"
@@ -66,10 +64,10 @@ class TestNileVectorStore(unittest.TestCase):
         # expected to fail if we don't have tenant_id in kwargs
         with pytest.raises(Exception) as e_info:
             self.tenant_aware_vector_store.delete("test_id")
-            assert (
-                "tenant_id must be specified in delete_kwargs if tenant_aware is True"
-                in str(e_info.value)
-            )
+        assert (
+            "tenant_id must be specified in delete_kwargs if tenant_aware is True"
+            in str(e_info.value)
+        )
 
         # delete the node with tenant_id
         self.tenant_aware_vector_store.delete("test_id", tenant_id="test_tenant")
@@ -85,10 +83,10 @@ class TestNileVectorStore(unittest.TestCase):
         # expected to fail if we don't have tenant_id in kwargs
         with pytest.raises(Exception) as e_info:
             self.tenant_aware_vector_store.query(query_embedding)
-            assert (
-                "tenant_id must be specified in query_kwargs if tenant_aware is True"
-                in str(e_info.value)
-            )
+        assert (
+            "tenant_id must be specified in query_kwargs if tenant_aware is True"
+            in str(e_info.value)
+        )
 
         # query the node with tenant_id
         results = self.tenant_aware_vector_store.query(

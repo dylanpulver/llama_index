@@ -405,7 +405,7 @@ class NileVectorStore(BasePydanticVectorStore):
         hnsw_ef_search = kwargs.get("hnsw_ef_search")
         if self.tenant_aware and tenant_id is None:
             raise ValueError(
-                "tenant_id must be specified in kwargs if tenant_aware is True"
+                "tenant_id must be specified in query_kwargs if tenant_aware is True"
             )
         # check query mode
         if query_embedding.mode != VectorStoreQueryMode.DEFAULT:
@@ -425,7 +425,7 @@ class NileVectorStore(BasePydanticVectorStore):
         tenant_id = kwargs.get("tenant_id")
         if self.tenant_aware and tenant_id is None:
             raise ValueError(
-                "tenant_id must be specified in kwargs if tenant_aware is True"
+                "tenant_id must be specified in query_kwargs if tenant_aware is True"
             )
         async with self._async_conn.cursor() as cursor:
             results = self._execute_query(cursor, query_embedding, tenant_id)
