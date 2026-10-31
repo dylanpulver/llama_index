@@ -71,14 +71,18 @@ def test_llm_complete():
     mock_response = Response()
     mock_response.status_code = 200
     mock_response._content = json.dumps(RESPONSE_JSON).encode("utf-8")
-    expected_result = CompletionResponse(text="<string>", raw=RESPONSE_JSON)
+    expected_result = CompletionResponse(
+        text="<string>",
+        raw=RESPONSE_JSON,
+        additional_kwargs={"tool_calls": None},
+    )
     llm = SiliconFlow(api_key="...")
     with mock.patch("requests.Session.post", return_value=mock_response) as mock_post:
         actual_result = llm.complete(input_text)
         assert actual_result.text == expected_result.text
-        assert actual_result.additional_kwargs == actual_result.additional_kwargs
-        assert actual_result.raw == actual_result.raw
-        assert actual_result.logprobs == actual_result.logprobs
+        assert actual_result.additional_kwargs == expected_result.additional_kwargs
+        assert actual_result.raw == expected_result.raw
+        assert actual_result.logprobs == expected_result.logprobs
 
         mock_post.assert_called_once_with(
             llm.base_url,
@@ -100,7 +104,11 @@ def test_llm_complete():
 async def test_llm_async_complete():
     input_text = "..."
     mock_response = MockAsyncResponse(json_data=RESPONSE_JSON)
-    expected_result = CompletionResponse(text="<string>", raw=RESPONSE_JSON)
+    expected_result = CompletionResponse(
+        text="<string>",
+        raw=RESPONSE_JSON,
+        additional_kwargs={"tool_calls": None},
+    )
     llm = SiliconFlow(api_key="...")
     with mock.patch(
         "aiohttp.ClientSession.post", return_value=mock_response
@@ -108,9 +116,9 @@ async def test_llm_async_complete():
         actual_result = await llm.acomplete(input_text)
 
         assert actual_result.text == expected_result.text
-        assert actual_result.additional_kwargs == actual_result.additional_kwargs
-        assert actual_result.raw == actual_result.raw
-        assert actual_result.logprobs == actual_result.logprobs
+        assert actual_result.additional_kwargs == expected_result.additional_kwargs
+        assert actual_result.raw == expected_result.raw
+        assert actual_result.logprobs == expected_result.logprobs
 
         mock_post.assert_called_once_with(
             llm.base_url,
